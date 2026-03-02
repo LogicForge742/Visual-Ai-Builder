@@ -1,0 +1,225 @@
+/* 
+   index.css
+   Global styles for the entire VectoShift app.
+   - Imports the Inter font from Google
+   - Sets up CSS color variables for each node type
+   - Applies dark theme to the canvas, controls, and minimap
+   - Defines reusable "card" and "field" styles shared by all nodes
+   */
+
+/* Load the Inter font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Color Variables 
+   One accent color per node type + shared dark background colors.
+   Change a color here and it updates everywhere automatically.
+  */
+:root {
+  --color-input:  #3b82f6;  /* Blue  — Input node  */
+  --color-llm:    #8b5cf6;  /* Purple — LLM node   */
+  --color-output: #22c55e;  /* Green  — Output node */
+  --color-text:   #f59e0b;  /* Amber  — Text node  */
+  --node-bg:      #1e2130;  /* Dark card background */
+  --node-border:  #2e3347;  /* Subtle card border   */
+  --field-bg:     #12151f;  /* Input field background */
+  --field-border: #3a3f55;  /* Input field border   */
+  --label-color:  #9ca3af;  /* Grey label text      */
+  --text-primary: #f1f5f9;  /* Main white-ish text  */
+}
+
+/*  Reset  */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/*  Body / App Shell  */
+body {
+  font-family: 'Inter', sans-serif;
+  background: #0a0d14;   /* Very dark navy background */
+  color: var(--text-primary);
+  overflow: hidden;      /* Prevent page scrollbars (canvas handles scrolling) */
+}
+
+/* ReactFlow Canvas Background */
+.react-flow__renderer {
+  background: #0f1117;
+}
+
+.react-flow__background {
+  background-color: #0f1117;
+}
+
+/* Edge / Connection Line Color */
+.react-flow__edge-path {
+  stroke: #6366f1;   /* Indigo lines between nodes */
+  stroke-width: 2;
+}
+
+.react-flow__connection-path {
+  stroke: #6366f1;
+  stroke-width: 2;
+}
+
+/* MiniMap (bottom-right overview)  */
+.react-flow__minimap {
+  background: #1a1d2e !important;
+  border: 1px solid #2e3347;
+  border-radius: 8px;
+}
+
+/* Zoom Controls (bottom-left)  */
+.react-flow__controls {
+  background: #1e2130 !important;
+  border: 1px solid #2e3347 !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.react-flow__controls-button {
+  background: #1e2130 !important;
+  border-color: #2e3347 !important;
+  fill: #9ca3af !important;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.react-flow__controls-button:hover {
+  background: #030305 !important;
+  fill: #a78bfa !important;
+  transform: scale(1.15);
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
+}
+
+.react-flow__controls-button:active {
+  transform: scale(0.95);
+}
+
+/* 
+   Shared Node Card Styles
+   Every node (Input, LLM, Output, Text) uses these classes
+   so they all have a consistent look and feel.
+   */
+
+/* The outer card wrapper */
+.node-card {
+  background: var(--node-bg);
+  border: 1px solid var(--node-border);
+  border-radius: 12px;
+  overflow: hidden;
+  min-width: 220px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  font-family: 'Inter', sans-serif;
+}
+
+/* The coloured top bar (title + icon + badge) */
+.node-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+/* The emoji icon inside a header */
+.node-header .node-icon {
+  font-size: 14px;
+}
+
+/* The section below the header — holds all the form fields */
+.node-body {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/*  Form Field Styles */
+
+/* Wrapper for a label + input pair */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* Small uppercase label above a field (e.g. "VARIABLE NAME") */
+.field-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--label-color);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* Text input, dropdown, and textarea — all share this dark style */
+.field-input,
+.field-select,
+.field-textarea {
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  padding: 5px 8px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+
+/* Highlight border when the field is focused */
+.field-input:focus,
+.field-select:focus,
+.field-textarea:focus {
+  border-color: #6366f1;
+}
+
+/* Dropdown arrow icon (custom, since we removed the default browser arrow) */
+.field-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239ca3af'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
+}
+
+/* Textarea can be resized by the user vertically */
+.field-textarea {
+  resize: vertical;
+  min-height: 70px;
+  line-height: 1.5;
+}
+
+/* Handle Labels */
+/* Small text label placed beside a connection handle */
+.handle-label {
+  position: absolute;
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--label-color);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/*  Variable Badge (TextNode) */
+/* Amber pill showing a detected {{variable}} in the TextNode */
+.var-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(245,158,11,0.15);
+  border: 1px solid rgba(245,158,11,0.4);
+  border-radius: 12px;
+  padding: 2px 7px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #f59e0b;
+  flex-wrap: wrap;
+}

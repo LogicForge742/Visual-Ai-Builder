@@ -1,0 +1,33 @@
+#  VectoShifft Docker Compose
+# Launch everything with: docker-compose up --build
+#
+# Services:
+#   - frontend: React app on port 3000
+#   - backend:  FastAPI server on port 8000
+
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend-20260227T074331Z-1-001/backend
+    ports:
+      - "8000:8000"
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend-20260227T074328Z-1-001/frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
